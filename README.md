@@ -33,6 +33,7 @@ Agents are presented with a natural-language business question, a relational sch
 ---
 
 ## 🗂️ Project Structure
+```
 sql_analytics_env/
 ├── inference.py ← Baseline LLM evaluation script (MANDATORY: root, exact name)
 ├── sql_analytics_env.py ← Async client wrapper (imported by inference.py)
@@ -46,7 +47,7 @@ sql_analytics_env/
 ├── graders.py ← Deterministic Jaccard-based scoring
 ├── environment.py ← Core reset() / step() / state() class
 └── server.py ← FastAPI REST server
-
+```
 
 ---
 
