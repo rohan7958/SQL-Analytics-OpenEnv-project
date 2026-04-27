@@ -275,10 +275,11 @@ Evaluated using `Qwen/Qwen2.5-72B-Instruct` at `temperature=0.0`:
 ## 📋 Inference Output Format
 
 The script emits exactly three line types to stdout:
+```
 START] task=easy env=sql-analytics-env model=Qwen/Qwen2.5-72B-Instruct
 [STEP] step=1 action=SELECT customer_name, city, amount FROM sales WHERE state = 'Karnataka' AND amount > 5000 ORDER BY amount DESC reward=0.92 done=true error=null
 [END] success=true steps=1 score=0.92 rewards=0.92
-
+```
 
 ---
 
