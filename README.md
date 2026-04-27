@@ -119,25 +119,39 @@ ORDER BY department ASC, salary_rank ASC;
 ## ⚖️ Reward Function
 
 Every task uses a **three-component scoring formula** that gives partial credit at each step:
-score = column_score (max 0.20)
-+ row_score (max 0.20)
-+ value_score (max 0.60) ← Jaccard similarity
+
+score = column_score (max 0.20) + row_score (max 0.20) + value_score (max 0.60) ← Jaccard similarity
 
 
-| Component | How It's Calculated | Max Points |
-|-----------|---------------------|------------|
-| **Column match** | Are the expected columns present in the result? Exact = 0.20, subset = 0.15, overlap = proportional | 0.20 |
-| **Row count** | `0.20 × (1 − min(|n_result − n_expected| / n_expected, 1))` | 0.20 |
-| **Value overlap** | Jaccard similarity: `\|result ∩ expected\| / \|result ∪ expected\|` on normalised row tuples | 0.60 |
+**Column score** — checks if expected columns are present in the result:
+- Exact match → `0.20`
+- Expected columns are a subset of result → `0.15`
+- Partial overlap → proportional partial credit
+
+**Row count score** — continuous penalty based on distance from expected row count:
+row_score = 0.20 × (1 - min(abs(n_result - n_expected) / n_expected, 1.0))
+
+
+**Value overlap score** — Jaccard similarity on normalised row tuples:
+value_score = 0.60 × (|result ∩ expected| / |result ∪ expected|)
+
+
+| Component | Max Score |
+|-----------|-----------|
+| Column match | 0.20 |
+| Row count | 0.20 |
+| Value overlap (Jaccard) | 0.60 |
+| **Total** | **1.00** |
 
 ### Reward Schedule
 
 | Situation | Reward |
 |-----------|--------|
-| Destructive SQL keyword (DROP / DELETE / INSERT / UPDATE / ALTER / TRUNCATE) | **-0.10** |
-| SQL syntax error or runtime exception | **-0.05** |
+| Destructive keyword (DROP / DELETE / INSERT / UPDATE / ALTER / TRUNCATE) | -0.10 |
+| SQL syntax error or runtime exception | -0.05 |
 | Partial answer | 0.0 – 0.89 |
-| Correct answer (episode terminates) | **≥ 0.90** |
+| Correct answer — episode terminates | >= 0.90 |
+
 
 ---
 
